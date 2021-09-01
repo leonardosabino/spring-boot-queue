@@ -3,14 +3,19 @@ package com.example.queue.kafka.producer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@RestController(value = "/v1/kafka")
+@RestController
+@RequestMapping(path = "v1/kafka")
 public class KafkaProducer {
 
   @Autowired(required = false)
@@ -22,8 +27,8 @@ public class KafkaProducer {
   @Value(value = "${kafka.enable}")
   private boolean kafkaEnable;
 
-  @GetMapping
-  public void enviarMensagem(String mensagem) {
+  @GetMapping("{message}")
+  public void enviarMensagem(@PathVariable String message) {
     if (!kafkaEnable) {
       throw new IllegalArgumentException(
           "Pré condição para utilizar kafka não habilitado" +
@@ -31,7 +36,7 @@ public class KafkaProducer {
               "origin");
     }
 
-    var future = kafkaTemplate.send(kafkaTopic, mensagem);
+    var future = kafkaTemplate.send(kafkaTopic, message);
 
     future.addCallback(new ListenableFutureCallback<>() {
 
@@ -45,7 +50,7 @@ public class KafkaProducer {
       @Override
       public void onFailure(Throwable ex) {
         log.error(
-            "Erro ao enviar mensagem para o kafka: " + ex.getMessage() + " Messagem: " + mensagem);
+            "Erro ao enviar mensagem para o kafka: " + ex.getMessage() + " Messagem: " + message);
       }
     });
   }
