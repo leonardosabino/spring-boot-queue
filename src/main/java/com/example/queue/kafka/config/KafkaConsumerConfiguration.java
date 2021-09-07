@@ -25,6 +25,12 @@ public class KafkaConsumerConfiguration {
 
   @Bean
   public ConsumerFactory<String, String> consumerFactory() {
+    // Enable when you need deserialize object from another service
+    //var jsonDeserializer = new JsonDeserializer<ExampleDTO>(String.class);
+    //jsonDeserializer.setRemoveTypeHeaders(false);
+    //jsonDeserializer.addTrustedPackages("*");
+    //jsonDeserializer.setUseTypeMapperForKey(true);
+
     var props = new HashMap<String, Object>();
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaUrl);
     props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroupId);

@@ -26,12 +26,10 @@ public class KafkaProducer {
   private boolean kafkaEnable;
 
   @GetMapping("{message}")
-  public void enviarMensagem(@PathVariable String message) {
+  public void sendMessage(@PathVariable String message) {
     if (!kafkaEnable) {
       throw new IllegalArgumentException(
-          "Pré condição para utilizar kafka não habilitado" +
-              "kafka.enable is false" +
-              "origin");
+          "Property to enable sqs is false. (sqs.enable is false)");
     }
 
     var future = kafkaTemplate.send(kafkaTopic, message);
@@ -41,14 +39,14 @@ public class KafkaProducer {
       @Override
       public void onSuccess(SendResult<String, String> result) {
         log.info(
-            "Enviado mensagem: " + result.getProducerRecord().toString() + "no topico: " + result
+            "Message sent: " + result.getProducerRecord().toString() + "in topic: " + result
                 .getRecordMetadata().topic());
       }
 
       @Override
       public void onFailure(Throwable ex) {
         log.error(
-            "Erro ao enviar mensagem para o kafka: " + ex.getMessage() + " Messagem: " + message);
+            "Error to send the message: " + ex.getMessage() + "\n Message: " + message);
       }
     });
   }

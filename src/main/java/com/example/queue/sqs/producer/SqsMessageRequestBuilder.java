@@ -1,25 +1,18 @@
-package com.example.queue.sqs;
+package com.example.queue.sqs.producer;
 
 import com.amazonaws.services.sqs.model.MessageAttributeValue;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
-/**
- * Helper class to generate {@link SendMessageRequest} with default values:
- * <li>
- *   <ul>MessageGroupId - Random UUID </ul>
- *   <ul>contentType - application/json </ul>
- * <li/>
- */
 public class SqsMessageRequestBuilder {
 
   private final SendMessageRequest request;
 
   public SqsMessageRequestBuilder() {
     request = new SendMessageRequest();
-    request.setMessageGroupId(UUID.randomUUID().toString());
+    // enable group id when the queue is FIFO
+    //request.setMessageGroupId(UUID.randomUUID().toString());
 
     //Set default message contentType application/json
     MessageAttributeValue messageAttributeValue = new MessageAttributeValue();

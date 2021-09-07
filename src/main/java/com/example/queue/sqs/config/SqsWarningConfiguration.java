@@ -1,4 +1,4 @@
-package com.example.queue.kafka.config;
+package com.example.queue.sqs.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@ConditionalOnProperty(value = {"kafka.enable"}, havingValue = "false")
-public class KafkaWarningConfiguration {
+@ConditionalOnProperty(value = {"sqs.enable"}, havingValue = "false")
+public class SqsWarningConfiguration {
 
   @EventListener(ApplicationReadyEvent.class)
-  public void printLogIfKafkaIsDisabled() {
-    log.warn("To use Kafka make sure the property 'kafka.enable' is true");
+  public void printLogIfSqsIsDisabled() {
+    log.warn("To use SQS make sure the property 'sqs.enable' is true");
   }
 }
